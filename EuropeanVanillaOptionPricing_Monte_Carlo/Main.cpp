@@ -21,14 +21,14 @@ double gaussian_box_muller() {
 }
 
 double monte_carlo_call_price(const int& num_sims, const double& S, const double& K, const double& r, const double& v, const double& T) {
-	double S_adjust = S * exp(T * (r - 0.5 * v * v));
-	double S_cur = 0.0;
-	double payoff_sum = 0.0;
+	double S_adjust = S * exp(T * (r - 0.5 * v * v)); //adjustment to the spot price
+	double S_cur = 0.0; //spot/current price
+	double payoff_sum = 0.0; //get sum
 
 	for (int i = 0;i < num_sims;i++) {
-		double gauss_bm = gaussian_box_muller();
-		S_cur = S_adjust * exp(sqrt(v * v * T) * gauss_bm);
-		payoff_sum += std::max(S_cur - K, 0.0);
+		double gauss_bm = gaussian_box_muller(); //random number generator
+		S_cur = S_adjust * exp(sqrt(v * v * T) * gauss_bm); //adjust the spot price using the brownian motion final dist
+		payoff_sum += std::max(S_cur - K, 0.0); //sum the option payoff
 	}
 	return (payoff_sum / static_cast<double>(num_sims)) * exp(-r * T);
 }
